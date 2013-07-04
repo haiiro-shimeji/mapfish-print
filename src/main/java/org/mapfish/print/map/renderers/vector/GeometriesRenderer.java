@@ -64,9 +64,14 @@ public abstract class GeometriesRenderer<T extends Geometry> {
         if (renderer == null) {
             throw new RuntimeException("Rendering of " + geometry.getClass().getName() + " not supported");
         }
-        dc.saveState();
+		dc.saveState();
         try {
             renderer.renderImpl(context, dc, style, geometry, affineTransform);
+        } finally {
+            dc.restoreState();
+        }
+		dc.saveState();
+		try {
             LabelRenderer.applyStyle(context, dc, style, geometry, affineTransform);
         } finally {
             dc.restoreState();
